@@ -1,103 +1,150 @@
-import Image from "next/image";
+// src/pages/index.tsx
+"use client";
+import { useState, useEffect } from 'react';
+import { motion, useScroll } from 'framer-motion';
+import dynamic from 'next/dynamic';
+import { HoverProvider } from './contexts/HoverContext';
+import LoadingScreen from './components/LoadingScreen';
+import PageTransition from './components/Transition';
+import Header from './components/Header';
+import Hero from './components/Hero';
+import Skills from './components/Skills';
+import Education from './components/Education';
+import ScrollToTop from './components/ScrollToTop';
+import CursorFollower from './components/CursorFollower';
+
+const Projects = dynamic(() => import('./components/Projects'), { ssr: false });
+const Achievements = dynamic(() => import('./components/Achievements'), { ssr: false });
+const Contact = dynamic(() => import('./components/Contact'), { ssr: false });
+const Footer = dynamic(() => import('./components/Footer'), { ssr: false });
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [isLoading, setIsLoading] = useState(true);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const { scrollYProgress } = useScroll();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+      setIsTransitioning(true);
+    }, 4000); // Changed to 4-second loading screen
+    
+    const handleScroll = () => setShowScrollTop(window.scrollY > 300);
+    window.addEventListener("scroll", handleScroll);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const handleTransitionComplete = () => {
+    setIsTransitioning(false);
+  };
+
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Animation variants for content sections
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: 0.3 + i * 0.1,
+        duration: 0.8,
+        ease: [0.1, 0.25, 0.3, 1]
+      }
+    })
+  };
+
+  return (
+    <HoverProvider>
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+        <LoadingScreen isLoading={isLoading} />
+        <PageTransition 
+          isTransitioning={isTransitioning}
+          onComplete={handleTransitionComplete}
+        />
+
+        {/* Content only visible after loading and transition */}
+        <div className={`transition-opacity duration-500 ${isLoading || isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+          <Header />
+          
+          <motion.div
+            custom={0}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <Hero />
+          </motion.div>
+          
+          <motion.div
+            custom={1}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
           >
-            Read our docs
-          </a>
+            <Skills />
+          </motion.div>
+          
+          <motion.div
+            custom={2}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
+          >
+            <Education />
+          </motion.div>
+          
+          <motion.div
+            custom={3}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
+          >
+            <Projects />
+          </motion.div>
+          
+          <motion.div
+            custom={4}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
+          >
+            <Achievements />
+          </motion.div>
+          
+          <motion.div
+            custom={5}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
+          >
+            <Contact />
+          </motion.div>
+          
+          <motion.div
+            custom={6}
+            initial="hidden"
+            animate={!isLoading && !isTransitioning ? "visible" : "hidden"}
+            variants={contentVariants}
+          >
+            <Footer />
+          </motion.div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+        <ScrollToTop show={showScrollTop} onClick={scrollToTop} />
+        <CursorFollower />
+        
+        <motion.div
+          className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-blue-600 z-50 origin-left"
+          style={{ scaleX: scrollYProgress }}
+          whileHover={{ height: "3px", boxShadow: "0 0 10px rgba(59, 130, 246, 0.7)" }}
+        />
+      </div>
+    </HoverProvider>
   );
 }
