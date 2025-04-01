@@ -11,7 +11,10 @@ export default function Footer() {
           animate={{ opacity: 1 }}
           transition={{ duration: 1 }}
         >
-          
+          {/* Footer sections */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Footer sections */}
+          </div>
         </motion.div>
 
         {/* Horizontal divider line */}

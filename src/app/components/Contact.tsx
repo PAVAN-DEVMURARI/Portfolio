@@ -97,7 +97,8 @@ export default function Contact() {
           Get In Touch
         </motion.h2>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Contact form and info sections */}
           <motion.div
             className="bg-white p-8 rounded-xl shadow-lg"
             initial={{ opacity: 0, x: -50 }}

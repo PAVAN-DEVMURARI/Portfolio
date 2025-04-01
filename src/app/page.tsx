@@ -32,10 +32,24 @@ export default function Home() {
     
     const handleScroll = () => setShowScrollTop(window.scrollY > 300);
     window.addEventListener("scroll", handleScroll);
-    
+
+    // Prevent body scroll when mobile menu is open
+    const setBodyLock = (isLocked: boolean) => {
+      document.body.style.overflow = isLocked ? 'hidden' : '';
+    };
+
+    // Subscribe to menu state changes
+    const handleMenuStateChange = (isOpen: boolean) => {
+      setBodyLock(isOpen);
+    };
+
+    // You'll need to set up a way to listen for menu state changes
+    // This depends on your state management approach
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener("scroll", handleScroll);
+      setBodyLock(false);
     };
   }, []);
 
