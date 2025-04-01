@@ -16,14 +16,7 @@ export default function Achievements() {
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
   };
 
-  const achievementCardHover = {
-    rest: { scale: 1 },
-    hover: {
-      scale: 1.05,
-      boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.25)",
-      transition: { duration: 0.4, ease: "easeOut" }
-    }
-  };
+
 
   return (
     <section id="achievements" className="py-24 bg-gradient-to-b from-white to-blue-50 relative overflow-hidden">

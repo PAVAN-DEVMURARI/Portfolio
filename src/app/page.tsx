@@ -38,10 +38,7 @@ export default function Home() {
       document.body.style.overflow = isLocked ? 'hidden' : '';
     };
 
-    // Subscribe to menu state changes
-    const handleMenuStateChange = (isOpen: boolean) => {
-      setBodyLock(isOpen);
-    };
+   
 
     // You'll need to set up a way to listen for menu state changes
     // This depends on your state management approach

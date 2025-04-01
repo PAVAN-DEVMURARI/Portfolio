@@ -1,6 +1,6 @@
 // src/components/Projects.tsx
 import { motion } from 'framer-motion';
-import { ExternalLink, Github, Code } from 'lucide-react';
+import {  Github, Code } from 'lucide-react';
 import { useHover } from '../contexts/HoverContext';
 import { useEffect, useState } from 'react';
 
@@ -162,7 +162,7 @@ export default function Projects() {
                 description: 'Personal portfolio website showcasing projects and skills.',
                 tech: ['React.js', 'Framer Motion', 'Tailwind CSS'],
                 icon: <Code className="w-5 h-5" />,
-                link: 'https://github.com/PAVAN-DEVMURARI/portfolio'
+                link: 'https://github.com/PAVAN-DEVMURARI/Portfolio'
               },
             ].map((project, index) => (
               <motion.div
